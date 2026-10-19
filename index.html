@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rekap Absen dari Foto</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f2f4fa;--surf:#fff;--ink:#17203a;--mut:#5d6785;--line:#dde2f0;--pri:#2c47c9;--priink:#fff;
+--h:#1b7f55;--hb:#e0f3ea;--s:#a86a00;--sb:#fbf0d6;--i:#2563b8;--ib:#e1ecfb;--a:#c23a3a;--ab:#fbe4e4}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1322;--surf:#171e34;--ink:#e8ecf8;--mut:#98a2c3;--line:#2a3354;--pri:#7f94ff;--priink:#0b1030;--h:#5fd1a0;--hb:#14352a;--s:#f0b94d;--sb:#3b2f12;--i:#7ab2ff;--ib:#17294a;--a:#ff8b8b;--ab:#40191b}}
+:root[data-theme="dark"]{--bg:#0e1322;--surf:#171e34;--ink:#e8ecf8;--mut:#98a2c3;--line:#2a3354;--pri:#7f94ff;--priink:#0b1030;--h:#5fd1a0;--hb:#14352a;--s:#f0b94d;--sb:#3b2f12;--i:#7ab2ff;--ib:#17294a;--a:#ff8b8b;--ab:#40191b}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Source Sans 3","Segoe UI",system-ui,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:22px 16px 56px}
+h1{font:800 26px/1.2 "Merriweather",Georgia,serif;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 18px}
+h2{font-size:17px;margin:0 0 10px}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:16px}
+.drop{display:block;border:2px dashed var(--pri);border-radius:18px;padding:30px 16px;text-align:center;background:var(--surf);cursor:pointer}
+.drop.over{background:var(--ib)}
+.drop b{display:block;font-size:19px;margin-bottom:4px}.drop span{color:var(--mut);font-size:14px}
+.drop input{position:absolute;width:1px;height:1px;opacity:0}
+.drop:focus-within{outline:3px solid var(--pri);outline-offset:2px}
+.q{list-style:none;margin:12px 0 0;padding:0}
+.q li{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:10px;background:var(--surf);border:1px solid var(--line);margin-top:6px;font-size:14px}
+.q .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:0 1 40%}.q .m{color:var(--mut);text-align:right}
+.q .ok .m{color:var(--h)}.q .err .m{color:var(--a)}.q .work .m{color:var(--pri);font-weight:700}
+.warn{background:var(--ab);color:var(--a);border-radius:12px;padding:10px 14px;margin-top:12px;font-size:14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button{border:1px solid var(--line);background:none;color:var(--ink);padding:6px 14px;border-radius:99px}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+label{display:block;font-size:13px;font-weight:700;color:var(--mut)}
+input,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:16px 0}
+.st{border-radius:14px;padding:12px 14px;font-size:14px}.st b{display:block;font-size:28px;line-height:1.1}
+.st.h{background:var(--hb);color:var(--h)}.st.s{background:var(--sb);color:var(--s)}.st.i{background:var(--ib);color:var(--i)}.st.a{background:var(--ab);color:var(--a)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:620px}
+th,td{padding:8px 10px;text-align:left;border-top:1px solid var(--line);vertical-align:top}
+thead th{border-top:0;background:var(--bg);font-size:13px}
+th.h{color:var(--h)}th.s{color:var(--s)}th.i{color:var(--i)}th.a{color:var(--a)}
+td input{width:62px;margin:0;padding:5px 8px;text-align:center}
+.dt{font-size:12px;color:var(--mut);margin-top:3px;max-width:90px}
+.nm{font-weight:700}
+.act{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.btn{border:0;background:var(--pri);color:var(--priink);font-weight:700;padding:10px 16px;border-radius:12px}
+.ghost{border:1px solid var(--line);background:none;color:var(--ink);padding:10px 16px;border-radius:12px}
+[hidden]{display:none!important}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:16px}
+.step{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:14px}
+.step i{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--pri);color:var(--priink);font-style:normal;font-weight:800;margin-bottom:6px}
+.step b{display:block}.step span{color:var(--mut);font-size:14px}
+.no{width:44px;color:var(--mut);font-variant-numeric:tabular-nums}
+td input.kl{width:124px;text-align:left}
+.ttl{margin:18px 0 0;font-size:19px}
+.hint{color:var(--mut);font-size:14px;margin:0 0 10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Rekap Absen dari Foto</h1>
+<p class="sub">Unggah foto lembar absen, lalu sakit, izin, alfa, tanggal, bulan, dan tahun langsung terekap.</p>
+
+<label class="drop" id="drop">
+<b>Pilih atau tarik foto absen ke sini</b>
+<span>Bisa banyak foto sekaligus. Nomor urut yang bersambung otomatis digabung jadi satu lembar. Kelas terbaca otomatis dari lembar, contoh: X TP 3.</span>
+<input type="file" id="file" accept="image/*" multiple>
+</label>
+<div class="warn" id="nosample" hidden>Fitur baca foto hanya aktif saat halaman dibuka lewat Claude dan kamu mengizinkan Claude membacanya.</div>
+<ul class="q" id="q"></ul>
+
+<div id="res"></div>
+<div class="steps" id="how">
+<div class="step"><i>1</i><b>Unggah foto absen</b><span>Pastikan foto jelas dan terang. Lembar lanjutan (No. 21 dan seterusnya) boleh diunggah juga.</span></div>
+<div class="step"><i>2</i><b>Periksa hasilnya</b><span>Nama, kelas (mis. X TP 3), hadir, sakit, izin, alfa, dan tanggal muncul otomatis. Ubah angka kalau ada yang salah baca.</span></div>
+<div class="step"><i>3</i><b>Unduh rekapnya</b><span>Simpan sebagai CSV untuk dibuka di Excel atau Google Sheets.</span></div>
+</div>
+</div>
+
+<script>
+const KEY="absen-v1",BLN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const ERR={not_granted:"Izin memakai Claude ditolak. Muat ulang halaman lalu izinkan.",rate_limited:"Terlalu banyak permintaan atau batas pemakaian tercapai. Coba lagi nanti.",image_rejected:"Foto tidak bisa dibaca. Coba foto lain yang lebih jelas.",refused:"Foto ini ditolak. Coba foto lain.",session_expired:"Sesi habis. Masuk ulang ke Claude.",invalid_json:"Hasil bacaan tidak lengkap. Coba unggah ulang.",empty:"Tidak ada nama yang terbaca. Pastikan foto jelas dan menampilkan daftar nama."};
+let sheets=[],act=0,queue=[],busy=false,sample=null,dl=null,delPend=false;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function load(){try{const r=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(r))sheets=r}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(sheets))}catch(e){}}
+
+function prompt_(){const n=new Date();return `Ini foto lembar absensi (daftar hadir). Baca semua nama dan kehadiran tiap tanggal.
+Kode: H, centang, atau titik = hadir; S = sakit; I = izin; A = alfa (tanpa keterangan). Kotak kosong pada hari yang belum berlangsung tidak dihitung.
+Tentukan bulan dan tahun dari judul atau tanggal di lembar. Jika tidak tertulis, isi null. Hari ini ${n.toISOString().slice(0,10)}.
+Tulis nama persis seperti terbaca. Jangan mengarang nama. Baca juga kolom nomor urut (No) persis seperti tertulis; jika tidak ada kolom nomor, isi null.
+Kelas ditulis lengkap: tingkat, jurusan, dan nomor rombel persis seperti tertulis (contoh: X TP 3, XI TKJ 2), jangan dipotong.
+Balas HANYA JSON tanpa teks lain, dengan bentuk:
+{"kelas":"nama kelas lengkap dengan jurusan, mis. X TP 3","bulan":angka 1-12 atau null,"tahun":angka atau null,"siswa":[{"no":nomor urut atau null,"kelas":"kelas lengkap siswa (tingkat, jurusan, nomor) jika tertulis per baris, jika tidak kosongkan","nama":"","hadir":jumlah hari hadir,"absen":[{"tgl":angka tanggal,"s":"S" atau "I" atau "A"}]}]}`}
+
+function addSheet(d,name){
+if(!d||!Array.isArray(d.siswa))return false;
+const sw=d.siswa.filter(x=>x&&x.nama).map(x=>{const tg={S:[],I:[],A:[]};
+(x.absen||[]).forEach(a=>{const k=String((a&&a.s)||"").trim().toUpperCase()[0];if(tg[k])tg[k].push(a.tgl)});
+return{no:Number(x.no)>0?Math.round(Number(x.no)):null,kelas:String(x.kelas||d.kelas||"").replace(/\s+/g," ").trim(),nama:String(x.nama),hadir:Number(x.hadir)||0,S:tg.S.length,I:tg.I.length,A:tg.A.length,tg}});
+if(!sw.length)return false;
+const hasNo=sw.some(x=>x.no);
+let pv=0;sw.forEach(x=>{if(!x.no)x.no=pv+1;pv=x.no});
+const n=new Date(),b=Number(d.bulan),t=Number(d.tahun),kl=String(d.kelas||"").replace(/\s+/g," ").trim();
+const lo=Math.min(...sw.map(x=>x.no)),hi=Math.max(...sw.map(x=>x.no));
+if(hasNo){const m=sheets.find(s=>s.hasNo&&(!(b>=1&&b<=12)||s.bulan===b)&&(!(t>2000)||s.tahun===t)&&(!kl||!s.kelas||s.kelas.replace(/\s/g,"").toLowerCase()===kl.replace(/\s/g,"").toLowerCase())&&(lo>Math.max(...s.siswa.map(x=>x.no))||hi<Math.min(...s.siswa.map(x=>x.no))));
+if(m){m.siswa=m.siswa.concat(sw).sort((p,q)=>p.no-q.no);if(!m.kelas)m.kelas=kl;m.file+=", "+name;act=sheets.indexOf(m);save();
+return "Disambung ke lembar "+BLN[m.bulan-1]+" "+m.tahun+" (No. "+m.siswa[0].no+"–"+m.siswa[m.siswa.length-1].no+")"}}
+sheets.push({id:Date.now()+Math.random(),file:name,hasNo,kelas:kl,bulan:b>=1&&b<=12?b:n.getMonth()+1,tahun:t>2000?t:n.getFullYear(),siswa:sw});
+act=sheets.length-1;save();return "Selesai, "+sw.length+" siswa terbaca"}
+
+function addFiles(fl){
+if(!sample){$("nosample").hidden=false;return}
+[...fl].filter(f=>f.type.startsWith("image/")).forEach(f=>queue.push({f,name:f.name||"foto",st:"wait",msg:"Menunggu"}));
+renderQ();run()}
+async function run(){
+if(busy)return;busy=true;
+for(const it of queue){if(it.st!=="wait")continue;
+it.st="work";it.msg="Claude sedang membaca…";renderQ();
+try{const d=await sample.json(prompt_(),{images:[it.f],modelTier:"default"});
+const r=addSheet(d,it.name);if(!r)throw{code:"empty"};
+it.st="ok";it.msg=r;render()}
+catch(e){it.st="err";it.msg=ERR[e&&e.code]||"Gagal membaca foto. Coba lagi."}
+renderQ()}
+busy=false}
+function renderQ(){$("q").innerHTML=queue.map(i=>`<li class="${i.st}"><span class="n">${esc(i.name)}</span><span class="m">${esc(i.msg)}</span></li>`).join("")}
+
+function totals(s){return s.siswa.reduce((a,x)=>({h:a.h+x.hadir,s:a.s+x.S,i:a.i+x.I,a:a.a+x.A}),{h:0,s:0,i:0,a:0})}
+function statsHTML(s){const t=totals(s);return `<div class="st h"><b>${t.h}</b>Hadir</div><div class="st s"><b>${t.s}</b>Sakit</div><div class="st i"><b>${t.i}</b>Izin</div><div class="st a"><b>${t.a}</b>Alfa</div>`}
+function render(){
+const el=$("res");$("how").hidden=sheets.length>0;
+if(!sheets.length){el.innerHTML="";return}
+if(act>=sheets.length)act=sheets.length-1;
+const s=sheets[act];
+const tabs=sheets.map((x,i)=>`<button type="button" data-tab="${i}" aria-pressed="${i===act}">${BLN[x.bulan-1].slice(0,3)} ${x.tahun}${x.kelas?" · "+esc(x.kelas):""}</button>`).join("");
+const rows=s.siswa.map((x,i)=>{const c=(k,lab)=>`<td><input type="number" min="0" inputmode="numeric" data-i="${i}" data-k="${k}" value="${x[k]}" aria-label="${lab} ${esc(x.nama)}">${k!=="hadir"&&x.tg[k].length?`<div class="dt">tgl ${x.tg[k].map(esc).join(", ")}</div>`:""}</td>`;
+return `<tr><td class="no">${x.no??i+1}</td><td class="nm">${esc(x.nama)}</td><td><input class="kl" data-i="${i}" data-k="kelas" value="${esc(x.kelas||s.kelas)}" placeholder="mis. X TP 3" aria-label="Kelas ${esc(x.nama)}"></td>${c("hadir","Hadir")}${c("S","Sakit")}${c("I","Izin")}${c("A","Alfa")}</tr>`}).join("");
+el.innerHTML=`<div class="card"><div class="tabs">${tabs}</div>
+<div class="ctl">
+<label>Bulan<select id="bln">${BLN.map((m,i)=>`<option value="${i+1}"${i+1===s.bulan?" selected":""}>${m}</option>`).join("")}</select></label>
+<label>Tahun<input id="thn" type="number" inputmode="numeric" value="${s.tahun}"></label>
+<label>Kelas dan jurusan (semua siswa)<input id="kls" value="${esc(s.kelas)}" placeholder="mis. X TP 3"></label></div>
+<h2 class="ttl">${BLN[s.bulan-1]} ${s.tahun}${s.kelas?" · Kelas "+esc(s.kelas):""} · ${s.siswa.length} siswa</h2><div class="stats" id="stats">${statsHTML(s)}</div>
+<p class="hint"><b>S</b> = sakit, <b>I</b> = izin, <b>A</b> = alfa. Angka bisa kamu ubah kalau ada yang salah baca.</p>
+<div class="tw"><table><thead><tr><th>No</th><th>Nama</th><th>Kelas</th><th class="h">Hadir</th><th class="s">Sakit (S)</th><th class="i">Izin (I)</th><th class="a">Alfa (A)</th></tr></thead><tbody>${rows}</tbody></table></div>
+<div class="act">${dl?'<button class="btn" id="folder" type="button">Simpan ke folder</button><button class="ghost" id="csv" type="button">Unduh CSV</button>':""}<button class="ghost" id="del" type="button">${delPend?"Yakin hapus? Klik lagi":"Hapus lembar ini"}</button></div></div>`}
+
+$("res").addEventListener("click",e=>{
+const t=e.target.closest("button");if(!t)return;
+if(t.dataset.tab!==undefined){act=Number(t.dataset.tab);delPend=false;render()}
+else if(t.id==="del"){if(!delPend){delPend=true;render();setTimeout(()=>{if(delPend){delPend=false;render()}},4000)}else{sheets.splice(act,1);delPend=false;save();render()}}
+else if(t.id==="csv")exportCsv(false);
+else if(t.id==="folder")exportCsv(true)});
+$("res").addEventListener("input",e=>{
+const s=sheets[act],t=e.target;if(!s)return;
+if(t.dataset.k==="kelas")s.siswa[Number(t.dataset.i)].kelas=t.value.trim();
+else if(t.dataset.k){s.siswa[Number(t.dataset.i)][t.dataset.k]=Math.max(0,Number(t.value)||0);$("stats").innerHTML=statsHTML(s)}
+else if(t.id==="thn")s.tahun=Number(t.value)||s.tahun;
+else if(t.id==="kls")s.kelas=t.value.trim();
+save()});
+$("res").addEventListener("change",e=>{
+if(e.target.id==="bln"){sheets[act].bulan=Number(e.target.value);save();render()}
+else if(e.target.id==="thn"||e.target.id==="kls")render()});
+
+async function exportCsv(folder){
+const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+const L=[["No","Nama","Kelas","Bulan","Tahun","Hadir","Sakit","Izin","Alfa","Tanggal sakit","Tanggal izin","Tanggal alfa"].map(q).join(",")];
+const s=sheets[act];
+s.siswa.forEach((x,i)=>L.push([x.no??i+1,x.nama,x.kelas||s.kelas,BLN[s.bulan-1],s.tahun,x.hadir,x.S,x.I,x.A,x.tg.S.join(" "),x.tg.I.join(" "),x.tg.A.join(" ")].map(q).join(",")));
+const fn=`rekap-absen-${BLN[s.bulan-1].toLowerCase()}-${s.tahun}.csv`,data="\ufeff"+L.join("\n");
+if(folder&&window.showDirectoryPicker){try{const d=await window.showDirectoryPicker({mode:"readwrite"});const h=await d.getFileHandle(fn,{create:true});const w=await h.createWritable();await w.write(data);await w.close();return}catch(e){if(e&&e.name==="AbortError")return}}
+try{await dl.save({filename:fn,data})}catch(e){}}
+
+const dz=$("drop");
+$("file").addEventListener("change",e=>{addFiles(e.target.files);e.target.value=""});
+["dragover","dragenter"].forEach(n=>dz.addEventListener(n,e=>{e.preventDefault();dz.classList.add("over")}));
+["dragleave","drop"].forEach(n=>dz.addEventListener(n,e=>{e.preventDefault();dz.classList.remove("over")}));
+dz.addEventListener("drop",e=>addFiles(e.dataTransfer.files));
+
+load();render();
+if(window.claude){
+claude.use("sample").then(s=>{sample=s;if(!s)$("nosample").hidden=false;else if(s.limits)s.limits().then(l=>{if(!l.images)$("nosample").hidden=false}).catch(()=>{})}).catch(()=>{$("nosample").hidden=false});
+claude.use("downloads").then(d=>{dl=d;render()}).catch(()=>{})}
+else $("nosample").hidden=false;
+</script>
+</body>
+</html>
